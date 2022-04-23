@@ -16,5 +16,5 @@ errors out with a 400 TOKEN_EXPIRED error message.
 # Observations
 Upon successful login (and register) The auth state changed log will fire with the User object. 
 After 10 seconds, a page refresh will be triggered, after which the auth state changed log will be null.
-If you inspect the network tab, the request to https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyALv0Y-mNuTQctOSiKMqueFyqKbuz47vjY
+If you inspect the network tab, the request to https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=<expired-key>
 will show a 400 TOKEN_EXPIRED error.
