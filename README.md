@@ -1,70 +1,20 @@
-# Getting Started with Create React App
+# Overview
+This repository demonstrates a basic example of a problem I have identified with the firebase SDK. The issue is tracked at https://github.com/firebase/firebase-js-sdk/issues/6174
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Problem Description
+When a new user (email is not yet registered with firebase authentication) signs in using Google Login, and the app
+is refreshed immediately after (approx 10 seconds), the authenticated state is lost.
 
-## Available Scripts
+On closer inspection, it was identified that a certain network call initiated by the firebase SDK upon page refresh
+errors out with a 400 TOKEN_EXPIRED error message.
 
-In the project directory, you can run:
+# Steps To Reproduce
+1. Update firebase.js with your project's firebase credentials
+2. Run the application using yarn start
+3. Open the browser console and click on Sign Up and observe both the console and the network tab.
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Observations
+Upon successful login (and register) The auth state changed log will fire with the User object. 
+After 10 seconds, a page refresh will be triggered, after which the auth state changed log will be null.
+If you inspect the network tab, the request to https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyALv0Y-mNuTQctOSiKMqueFyqKbuz47vjY
+will show a 400 TOKEN_EXPIRED error.
